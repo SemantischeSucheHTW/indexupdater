@@ -25,7 +25,8 @@ class ZeitIndexDao(IndexDao):
 
     def updateIndex(self,  pagedetails):
         datetime = pagedetails.date
-        self.zeitindex_collection.update_one({'date': datetime}, {'$push': {'urls':  pagedetails.url}})
+        self.zeitindex_collection.update_one({'date': datetime}, {'$push': {'urls':  pagedetails.url}}, upsert=True)
+        #self.ortsindex_collection.update_one({"URL": pagedetails.url}, {"$set": {"zeit": datetime}})
 
         print(f"New entry to {pagedetails.location} written")
         return None
