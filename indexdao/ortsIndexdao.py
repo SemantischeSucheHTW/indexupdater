@@ -27,6 +27,9 @@ class OrtsIndexDao(IndexDao):
         print(f"New entry to {pagedetails.location} written")
         return None
 
-    def getUrlfromKey(self, searchKey, weight=0.0): 
-        temp = self.ortsindex_collection.find({'ort' : searchKey})
-        return (temp, weight)
+    def getUrlfromKey(self, *searchKey, weight=0.0):
+        result = self.ortsindex_collection.find({'ort' : searchKey[0]})
+        urls = []
+        for doc in result:
+            urls.append(doc['urls'])
+        return (urls, weight)

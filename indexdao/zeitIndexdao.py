@@ -31,6 +31,12 @@ class ZeitIndexDao(IndexDao):
         print(f"New entry to {pagedetails.location} written")
         return None
 
-    def getUrlfromKey(self, searchKey, weight=0.0): 
-        temp = self.zeitindex_collection.find({'date' : searchKey})
-        return (temp, weight)
+    def getUrlfromKey(self, *searchKey, weight=0.0):
+        if len(searchKey) == 1:
+            result = self.zeitindex_collection.find({'date' : searchKey[0]})
+        if len(searchKey) == 2:
+            result = self.zeitindex_collection.find({ 'date': { '$gte':searchKey[0], '$lt': searchKey[1]}}) 
+        urls = []
+        for doc in result:
+            urls.append(doc['urls'])
+        return (urls, weight)

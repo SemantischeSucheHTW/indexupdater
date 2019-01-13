@@ -21,5 +21,5 @@ class IndexDao:
         '''
         pass
 
-    def getUrlfromKey(self, searchKey):
+    def getUrlfromKey(self, *searchKey):
         pass
