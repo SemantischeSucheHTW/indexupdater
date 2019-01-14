@@ -2,8 +2,8 @@ FROM python:3.7-stretch
 
 RUN pip install kafka-python pymongo
 
-RUN mkdir /textprocessor
-WORKDIR /textprocessor
+RUN mkdir /indexupdater
+WORKDIR /indexupdater
 
 COPY indexdao indexdao
 COPY pagedetailsdao pagedetailsdao
