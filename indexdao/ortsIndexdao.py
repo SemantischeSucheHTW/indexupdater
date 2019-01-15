@@ -22,7 +22,11 @@ class OrtsIndexDao(IndexDao):
         
 
     def updateIndex(self,  pagedetails):
-        self.ortsindex_collection.update_one({'ort': pagedetails.location}, {'$push': {'urls':  pagedetails.url}}, upsert=True)
+        self.ortsindex_collection.update_one(
+                {'ort': pagedetails.location},
+                {'$addToSet': { "urls" : pagedetails.url } },
+                upsert=True
+        )
         #self.ortsindex_collection.update_one({"URL": pagedetails.url}, {"$set": {"ort": pagedetails.location}})
         print(f"New entry to {pagedetails.location} written")
         return None
@@ -31,5 +35,6 @@ class OrtsIndexDao(IndexDao):
         result = self.ortsindex_collection.find({'ort' : searchKey[0]})
         urls = []
         for doc in result:
-            urls.append(doc['urls'])
+            for url in doc["urls"]:
+                urls.append(url)
         return (urls, weight)

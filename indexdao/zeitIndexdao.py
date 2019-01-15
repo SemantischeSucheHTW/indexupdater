@@ -25,7 +25,11 @@ class ZeitIndexDao(IndexDao):
 
     def updateIndex(self,  pagedetails):
         datetime = pagedetails.date
-        self.zeitindex_collection.update_one({'date': datetime}, {'$push': {'urls':  pagedetails.url}}, upsert=True)
+        self.zeitindex_collection.update_one(
+                {'date': datetime},
+                {'$addToSet': { "urls" : pagedetails.url } },
+                upsert=True
+        )
         #self.ortsindex_collection.update_one({"URL": pagedetails.url}, {"$set": {"zeit": datetime}})
 
         print(f"New entry to {pagedetails.location} written")
@@ -38,5 +42,6 @@ class ZeitIndexDao(IndexDao):
             result = self.zeitindex_collection.find({ 'date': { '$gte':searchKey[0], '$lt': searchKey[1]}}) 
         urls = []
         for doc in result:
-            urls.append(doc['urls'])
+            for url in doc['urls']:
+                urls.append(url)
         return (urls, weight)
